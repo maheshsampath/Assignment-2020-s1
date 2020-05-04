@@ -18,7 +18,35 @@
     <script src="/FrontEnd/js/jquery.min.js"></script>
     <script src="/FrontEnd/js/bootstrap3.3.7.min.js"></script>
     <script src="/FrontEnd/Controllers/UserControllers/hospitalController.js"></script>
-   
+    <script src="https://www.paypal.com/sdk/js?client-id=AQx4zvzIj7DBk55SgQF0_JMY4ncrKIIszJ6zBlxkKyHQQ9Go3zisKtJIxfbe9NEXQsWp0n83rAGYTo9X&disable-funding=credit,card">
+        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    </script>
+    <style>
+        /* Media query for mobile viewport */
+        @media screen and (max-width: 400px) {
+            #paypal-button-container {
+                width: 100%;
+            }
+        }
+
+        /* Media query for desktop viewport */
+        @media screen and (min-width: 400px) {
+            #paypal-button-container {
+                width: 250px;
+            }
+        }
+    </style>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Activate tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
+        });
+        if (sessionStorage.getItem("userType") == null || sessionStorage.getItem("userType") == "" || sessionStorage.getItem("userType") == "admin") {
+            window.location.href = "/FrontEnd/views/login.jsp";
+        }
+    </script>
 </head>
 
 <body>
@@ -90,8 +118,162 @@
             </div>
         </div>
     
+        <!-- View Modal HTML -->
+        <div id="viewModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">View Hospital</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name :</label>
+                                <span id="name"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Address :</label>
+                                <span id="address"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone :</label>
+                                <span id="tp"></span>
+                            </div>
+                              <div class="form-group" style="text-align: center;">
+                                <label>Doctor</label>
+                                <table class="table table-striped table-hover" id="doctable">
+                                    <thead>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Add Appointment</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+       <!-- Add Appointmnt Modal HTML -->
+        <div id="addAppointmentModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Appointment</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Hospital Name :</label>
+                                 <span id="inputhospitalId"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Doctor Name :</label>
+                                <span id="inputdoctorId"></span>
+                            </div>
+                            <div class="form-group" style="text-align: center;">
+                                <label>Appointments On Doctor</label>
+                                <table class="table table-striped table-hover" id="appointmntDatetable">
+                                    <thead>
+                                        <tr>
+                                            <th>Appointment Id</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <label>Date :</label>
+                                <input type="date" class="form-control" id="inputdate">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="button" class="btn btn-success" id="formCreateBtn" value="Save">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Alert Modal HTML -->
+        <div id="AlertModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="alertTitle"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p id="AlertMsg"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" id="CloseBtn1" class="btn btn-default" data-dismiss="modal" value="close">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+         <!-- Alertpayment Modal HTML -->
+        <div id="AlertPymentModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="alertTitle2"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p id="AlertMsg2"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" id="CloseBtn2" class="btn btn-default" data-dismiss="modal" value="close">
+                            <div id="paypal-button-container"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    
+    <script>
+        paypal.Buttons({
+            enableStandardCardFields: true,
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: 99.00
+                        }
+                    }],
+                    application_context: {
+                        shipping_preference: 'NO_SHIPPING'
+                    }
+                });
+            },
+            onApprove: function(data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function(details) {
+                    // This function shows a transaction success message to your buyer.
+                    processPayment(details.id)
+                });
+            },
+            onAuthorize: function(data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function(details) {
+                    // This function shows a transaction success message to your buyer.
+                    processPayment(details.id)
+                });
+            }
+        }).render('#paypal-button-container');
+        // This function displays Smart Payment Buttons on your web page.
+    </script>
+    <script src="/FrontEnd/Shared/navbarStyles/js/popper.js"></script>
+
 </body>
 
 </html>
