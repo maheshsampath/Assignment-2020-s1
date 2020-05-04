@@ -79,6 +79,192 @@ function tableCreation(para) {
 
 }
 
+function ViewbuttonClick(para) {
+    Hospitals.forEach(function(item) {
+        if (item["id"] == para) {
+            Hospital = item;
+        }
+    });
+    setViewData();
+}
+
+function editbuttonClick(para) {
+    Hospitals.forEach(function(item) {
+        if (item["id"] == para) {
+            Hospital = item;
+        }
+    });
+    setEditViewData();
+}
+
+function deletebuttonClick(para) {
+    $globalUrl = $rootUrl + para;
+
+}
+
+
+$(document).on("click", "#formCreateBtn", function(event) {
+	$url = $rootUrl;
+	if(setCreateData()){
+
+    $.ajax({
+        type: "POST",
+        url: $url,
+        headers: {
+            "Authorization": "Basic " + btoa($username + ":" + $pw)
+        },
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(Hospital),
+        dataType: 'json',
+        success: function() {
+            alertModifier('create', 'success');
+            $('#AlertModal').modal('show');
+        },
+        error: function(jqXHR, exception) {
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Cannot Create the Record ';
+            } else if (jqXHR.status == 404) {
+                msg = 'No Access';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alertModifier('create', msg);
+            $('#AlertModal').modal('show');
+        }
+    })
+	}
+});
+
+
+$(document).on("click", "#formDeleteBtn", function(event) {
+    $.ajax({
+        url: $globalUrl,
+        headers: {
+            "Authorization": "Basic " + btoa($username + ":" + $pw)
+        },
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'DELETE',
+        success: function(data) {
+            alertModifier('delete', 'success');
+            $('#AlertModal').modal('show');
+        },
+        error: function(jqXHR, exception) {
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Cannot delete the Record related Items found';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alertModifier('create', msg);
+            $('#AlertModal').modal('show');
+        },
+    });
+
+});
+
+
+
+$(document).on("click", "#formEditBtn", function(event) {
+    setEditData();
+    $url = $rootUrl;
+
+    $.ajax({
+        type: "PUT",
+        url: $url,
+        headers: {
+            "Authorization": "Basic " + btoa($username + ":" + $pw)
+        },
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(Hospital),
+        dataType: 'json',
+        success: function() {
+            alertModifier('update', 'success');
+            $('#AlertModal').modal('show');
+        },
+        error: function(jqXHR, exception) {
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Cannot update the Record \nRelated Items Found';
+            } else if (jqXHR.status == 404) {
+                msg = 'No Access';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            alertModifier('create', msg);
+            $('#AlertModal').modal('show');
+        }
+    });
+
+});
+
+function setCreateData() {
+	var validate=true;
+    Hospital.name = document.getElementById("inputname").value;
+    Hospital.tp = document.getElementById("inputTp").value;
+    Hospital.address = document.getElementById("inputAddress").value;
+    if (Hospital.name == "") {
+    	document.getElementById("inputname").style.outline = "solid red 2px";
+	    validate=false;
+	  }
+    else
+    	document.getElementById("inputname").style.outline = "";
+    if (Hospital.tp == "") {
+    	document.getElementById("inputTp").style.outline = "solid red 2px";
+	    validate=false;
+	  }
+    else
+    	document.getElementById("inputTp").style.outline = "";
+    	
+    if (Hospital.address == "") {
+    	document.getElementById("inputAddress").style.outline = "solid red 2px";
+	    validate=false;
+	  }
+    else
+    	document.getElementById("inputAddress").style.outline = "";
+    	
+    return validate;
+	}
+function setViewData() {
+    document.getElementById("name").innerHTML = Hospital.name;
+    document.getElementById("tp").innerHTML = Hospital.tp;
+    document.getElementById("address").innerHTML = Hospital.address;
+}
+
+function setEditViewData() {
+    document.getElementById("nameEdit").value = Hospital.name;
+    document.getElementById("tpEdit").value = Hospital.tp;
+    document.getElementById("addressEdit").value = Hospital.address;
+
+}
+
 function setEditData() {
     Hospital.name = document.getElementById("nameEdit").value;
     Hospital.tp = document.getElementById("tpEdit").value;
@@ -120,4 +306,23 @@ $(document).on("click", "#CloseBtn", function(event) {
     window.location.reload();
 });
 
+function alertModifier(para1, para2) {
+    if (para2 == 'success') {
+        document.getElementById('alertTitle').innerHTML = "Succeed";
+        switch (para1) {
+            case 'create':
+                document.getElementById('AlertMsg').innerHTML = "Record Added Successfully";
+                break;
+            case 'update':
+                document.getElementById('AlertMsg').innerHTML = "Record Updated Successfully";
+                break;
+            case 'delete':
+                document.getElementById('AlertMsg').innerHTML = "Record Deleted Successfully";
+                break;
+        }
+    } else {
+        document.getElementById('alertTitle').innerHTML = "Failed";
+        document.getElementById('AlertMsg').innerHTML = para2;
+
+    }
 }
