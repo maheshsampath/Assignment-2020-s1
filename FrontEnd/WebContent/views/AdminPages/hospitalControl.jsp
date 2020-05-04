@@ -98,7 +98,139 @@
 
             </div>
         </div>
-       
+        <!-- Add Modal HTML -->
+        <div id="addModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Hospital</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="inputname" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <textarea class="form-control" id="inputAddress" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" id="inputTp" class="form-control" required>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="button" class="btn btn-success" id="formCreateBtn" value="Save">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- View Modal HTML -->
+        <div id="viewModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">View Hospital</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name :</label>
+                                <span id="name"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Address :</label>
+                                <span id="address"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone :</label>
+                                <span id="tp"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Modal HTML -->
+        <div id="editModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Hospital</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name :</label>
+                                <input type="text" class="form-control" id="nameEdit" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Address :</label>
+                                <input type="text" class="form-control" id="addressEdit" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone :</label>
+                                <input type="text" class="form-control" id="tpEdit" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="button" class="btn btn-info" id="formEditBtn" value="Update">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Modal HTML -->
+        <div id="deleteModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Delete Hospital</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete these Records?</p>
+                            <p class="text-warning"><small>This action cannot be undone.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="button" class="btn btn-danger" id="formDeleteBtn" value="Delete">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Alert Modal HTML -->
+        <div id="AlertModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="alertTitle"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p id="AlertMsg"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" id="CloseBtn" class="btn btn-default" data-dismiss="modal" value="close">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="/FrontEnd/Shared/navbarStyles/js/popper.js"></script>
 
